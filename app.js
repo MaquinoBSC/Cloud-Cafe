@@ -1,4 +1,5 @@
 const cafeList= document.querySelector('#cafe-list');
+const form= document.querySelector('#add-cafe-form');
 
 
 //create element and render cafe
@@ -19,6 +20,7 @@ const renderCafe= (doc)=> {
     cafeList.appendChild(li);
 };
 
+//Obtener los documentos de firestore
 db.collection('cafe').get()
     .then((snapshot)=> {
         snapshot.docs.forEach((doc)=> {
@@ -26,3 +28,17 @@ db.collection('cafe').get()
         });
     });
 
+//guardar datos en firestore
+form.addEventListener('submit', (e)=> {
+    e.preventDefault();
+
+    // const name= form['name'];
+    // const city= form['city'];
+    db.collection('cafe').add({
+        name: form.name.value,
+        city: form.city.value
+    });
+
+    form.name.value= '';
+    form.city.value= '';
+});
