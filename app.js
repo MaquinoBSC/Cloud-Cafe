@@ -33,6 +33,8 @@ const renderCafe= (doc)=> {
 };
 
 //Obtener los documentos de firestore
+// db.collection('cafe').where("city", "==", "Iztapalacra").get()
+// db.collection('cafe').where("city", "<", "h").get()
 db.collection('cafe').get()
     .then((snapshot)=> {
         snapshot.docs.forEach((doc)=> {
