@@ -8,16 +8,28 @@ const renderCafe= (doc)=> {
     let li= document.createElement('li');
     let name= document.createElement('span');
     let city= document.createElement('span');
+    let cross= document.createElement('div');
 
     //asihgnar atributos y contendio a los elemtnos
     li.setAttribute('data-id', doc.id);
     name.textContent= doc.data().name;
     city.textContent= doc.data().city;
+    cross.textContent= "X";
 
     //Agregar elementos hijos a un elemento
     li.appendChild(name);
     li.appendChild(city);
+    li.appendChild(cross);
     cafeList.appendChild(li);
+
+
+    //Eliminar documentos de firestore
+    cross.addEventListener('click', (e)=> {
+        e.stopPropagation();
+        let id= e.target.parentElement.getAttribute('data-id');
+
+        db.collection('cafe').doc(id).delete();
+    });
 };
 
 //Obtener los documentos de firestore
@@ -32,8 +44,7 @@ db.collection('cafe').get()
 form.addEventListener('submit', (e)=> {
     e.preventDefault();
 
-    // const name= form['name'];
-    // const city= form['city'];
+    // db.collection('cafe').doc().set({});
     db.collection('cafe').add({
         name: form.name.value,
         city: form.city.value
