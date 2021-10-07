@@ -38,12 +38,12 @@ const renderCafe= (doc)=> {
 // db.collection('cafe').orderBy('city').get()
 // db.collection('cafe').where('city', '==', 'Manchester').orderBy('name').get()
 // db.collection('cafe').limit(3).get()
-db.collection('cafe').get()
-    .then((snapshot)=> {
-        snapshot.docs.forEach((doc)=> {
-            renderCafe(doc);
-        });
-    });
+// db.collection('cafe').get()
+//     .then((snapshot)=> {
+//         snapshot.docs.forEach((doc)=> {
+//             renderCafe(doc);
+//         });
+//     });
 
 //guardar datos en firestore
 form.addEventListener('submit', (e)=> {
@@ -57,4 +57,18 @@ form.addEventListener('submit', (e)=> {
 
     form.name.value= '';
     form.city.value= '';
+});
+
+//real-time data
+db.collection('cafe').orderBy('city').onSnapshot((snapshot)=> {
+    let changes= snapshot.docChanges();
+
+    changes.forEach((change)=> {
+        if(change.type== "added"){
+            renderCafe(change.doc);
+        }else if(change.type== "removed"){
+            let li= cafeList.querySelector(`[data-id= ${change.doc.id}]`);
+            cafeList.removeChild(li);
+        }
+    })
 });
